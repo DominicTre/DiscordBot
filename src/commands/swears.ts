@@ -1,8 +1,9 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import Guild from '../schemas/Guild';
 import { CommandType } from '../typings/Command';
 
 module.exports = {
+	userPermissions: [PermissionFlagsBits.Administrator],
 	data: new SlashCommandBuilder()
 		.setName('swears')
 		.setDescription('moderate swears in guild')

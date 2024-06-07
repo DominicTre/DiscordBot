@@ -4,11 +4,13 @@ import {
 	ButtonBuilder,
 	EmbedBuilder,
 	SelectMenuBuilder,
-	MessageOptions
+	MessageOptions,
+	PermissionFlagsBits
 } from 'discord.js';
 import { CommandType } from '../typings/Command';
 
 module.exports = {
+	userPermissions: [PermissionFlagsBits.Administrator],
 	data: new SlashCommandBuilder().setName('help').setDescription('help'),
 	async run({ interaction, client }) {
 		if (interaction.isChatInputCommand()) {
