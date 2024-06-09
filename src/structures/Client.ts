@@ -1,4 +1,5 @@
 import {
+	ActivityType,
 	ApplicationCommandDataResolvable,
 	Client,
 	ClientEvents,
@@ -152,7 +153,7 @@ export class ExtendedClient extends Client {
 				this.registerSelectMenus()
 			]);
 
-			this.user?.setActivity({name: process.env.ACTIVITY!})
+			this.user?.setActivity({name: process.env.ACTIVITY!, type: ActivityType.Listening })
 		});
 
 		// Events
