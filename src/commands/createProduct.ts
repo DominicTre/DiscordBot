@@ -36,11 +36,9 @@ module.exports = {
                 }
             }
         }, { upsert: true });
-
-        // Récupération des produits pour vérification
-        const productData = await Product.findById(interaction.guildId);
-
-        console.log(productData?.products);
-        return await interaction.followUp(`Produit créé : ${nom} - ${prix}$`);
+        return await interaction.followUp({
+            content : `Produit créé : ${nom} - ${prix}$`,
+            ephemeral : true
+        });
 	}
 } as CommandType;

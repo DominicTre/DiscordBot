@@ -19,7 +19,7 @@ module.exports = {
 				.get('test-button-id')
 				?.button.setLabel('new label');
 
-			const selectMenu = client.selectMenus.get(
+			const selectMenuPromise = client.selectMenus.get(
 				'test-select-menu-id'
 			)?.selectMenu;
 
@@ -27,10 +27,14 @@ module.exports = {
 				components.push(
 					new ActionRowBuilder<ButtonBuilder>().addComponents(button)
 				);
-			selectMenu &&
-				components.push(
-					new ActionRowBuilder<SelectMenuBuilder>().addComponents(selectMenu)
-				);
+
+			if(selectMenuPromise){
+				const selectMenu = await selectMenuPromise(interaction)
+				const actionRow = new ActionRowBuilder<SelectMenuBuilder>()
+					.addComponents(selectMenu);
+				components.push(actionRow);
+			}
+			
 			return await interaction.channel?.send({
 				embeds: [
 					new EmbedBuilder().setTitle('title').setDescription('description')

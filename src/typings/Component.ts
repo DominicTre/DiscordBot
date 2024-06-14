@@ -1,6 +1,7 @@
 import {
 	ButtonBuilder,
 	ButtonInteraction,
+	CacheType,
 	ChatInputApplicationCommandData,
 	ModalBuilder,
 	ModalSubmitInteraction,
@@ -26,9 +27,9 @@ export type ModalType = {
 } & ChatInputApplicationCommandData;
 
 export type SelectMenuType = {
-	selectMenu: SelectMenuBuilder;
+	selectMenu: (Interaction:any) => Promise<SelectMenuBuilder>;
 	run: (options: {
 		client: ExtendedClient;
-		interaction: SelectMenuInteraction;
+		interaction: SelectMenuInteraction<CacheType>;
 	}) => any;
 } & ChatInputApplicationCommandData;

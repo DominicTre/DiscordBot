@@ -5,6 +5,7 @@ import {
     PermissionFlagsBits,
 	MessageOptions,
     SelectMenuBuilder,
+    ButtonBuilder,
 } from 'discord.js';
 import { CommandType } from '../typings/Command';
 
@@ -15,15 +16,23 @@ module.exports = {
 		if (interaction.isChatInputCommand()) {
 			const components: MessageOptions['components'] = [];
 
-            const selectMenu = client.selectMenus.get(
+            const selectMenuPromise = client.selectMenus.get(
 				'commandSelectMenu'
 			)?.selectMenu;
 
-            if(selectMenu){
+            const refreshCommandCreator = client.buttons.get(
+                'refreshCommandCreator'
+            )?.button;
+
+            if(selectMenuPromise && refreshCommandCreator){
+                const selectMenu = await selectMenuPromise(interaction)
                 const actionRow = new ActionRowBuilder<SelectMenuBuilder>()
 					.addComponents(selectMenu);
-				components.push(actionRow);
+                const buttonRow = new ActionRowBuilder<ButtonBuilder>()
+                    .addComponents(refreshCommandCreator)
+				components.push(actionRow,buttonRow);
             }
+            
             if (components.length > 0) {
                 interaction.deleteReply();
                 return await interaction.channel?.send({

@@ -64,10 +64,41 @@ export default new Event('interactionCreate', async (interaction) => {
 			}
 
 			case InteractionType.ModalSubmit: {
-				await interaction.deferReply({ ephemeral: true });
+				if (interaction.isModalSubmit()) {
+					const modalCustomId = interaction.customId;
+					//console.log(`Received modal submit interaction with custom ID: ${modalCustomId}`);
+
+					// Extraction de l'ID de base du modal
+					const baseModalId = modalCustomId.split('_')[0];
+					
+					if (baseModalId) {
+						const modal = client.modals.get(baseModalId);
+						if (modal) {
+							try {
+								await interaction.deferReply({ ephemeral: true });
+								await modal.run({ interaction, client });
+							} catch (error) {
+								console.error(error);
+								await interaction.reply({ content: 'An error occurred while processing the modal.', ephemeral: true });
+							}
+						} else {
+							console.log(`No modal found with base ID: ${baseModalId}`);
+						}
+					} else {
+						console.log(`Invalid baseModalId extracted from custom ID: ${modalCustomId}`);
+					}
+				}
+
+				/*await interaction.deferReply({ ephemeral: true });
+
+				//check le customID
+				const modalCustomId = interaction.customId;
+        		console.log(`Received modal submit interaction with custom ID: ${modalCustomId}`);
+
 				return await client.modals
 					.get(interaction.customId)
-					?.run({ client, interaction });
+					?.run({ client, interaction });*/
+				return
 			}
 
 			case InteractionType.MessageComponent: {
