@@ -1,5 +1,7 @@
 import {
     ActionRowBuilder,
+	Colors,
+	EmbedBuilder,
 	ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
@@ -32,10 +34,44 @@ module.exports = {
     
             if (!isNaN(price) && !isNaN(quantity)) {
                 const total = price * quantity;
-    
-                return await interaction.followUp({
-                    content: `Produit: ${productName}\nPrix: ${price}$\nQuantité: ${quantity}\nTotal: ${total}$`
-                });
+                if (interaction.guild) {
+                    const interactionUser = await interaction.guild.members.fetch(interaction.user.id)
+                    var iconURL
+                    if (interactionUser.displayAvatarURL() == null) iconURL= "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdiscord.com%2Fbranding&psig=AOvVaw1-nuINbLDblDZe71iEiRXg&ust=1719865465864000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCND7maOUhIcDFQAAAAAdAAAAABAE"
+                    else iconURL = interactionUser.displayAvatarURL()
+
+                    //Va chercher le channel des commandes avec le id. Voir pour le faire avec la BD avec un channel custom
+                    const channel = await interaction.guild.channels.fetch("1248038079365644368")
+                    if (channel?.isTextBased()) {
+                        await channel?.send({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setTitle(`Commande de ${productName}`)
+                                    .setColor(Colors.Aqua)
+                                    .setAuthor({name: interactionUser.displayName, iconURL: iconURL,url: `https://discord.com/users/${interactionUser.id}`})
+                                    .addFields(
+                                        {name : "Produit", value : `${productName}` },
+                                        {name : "Quantité", value : `${quantity}`, inline:true  },
+                                        {name : "Prix", value : `${price}$`, inline:true },
+                                        {name : "Total", value : `${total}$`, inline:true   },
+                                        {name : "Utilisateur", value : `<@${interaction.user.id}>`, inline: true }, // Mention de l'utilisateur
+                                    )
+                                    .setTimestamp()
+                            ],
+                        });
+                        
+                        
+                        
+                        
+                        
+                        
+                        return await interaction.followUp({
+                            content: `Produit: ${productName}\nPrix: ${price}$\nQuantité: ${quantity}\nTotal: ${total}$. \n\n Commande créée`
+                        });
+                    }
+                        
+                }
+
             } else {
                 return await interaction.followUp({
                     content: 'Prix ou quantité invalide.'
