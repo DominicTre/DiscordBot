@@ -1,5 +1,5 @@
 import { ActionRowBuilder, SelectMenuOptionBuilder, SelectMenuBuilder, CacheType, SelectMenuInteraction} from 'discord.js';
-import Product from '../../schemas/product';
+import Product from '../../schemas/Product';
 import { SelectMenuType } from '../../typings/Component';
 
 async function createSelectMenu(interaction: SelectMenuInteraction<CacheType>) {

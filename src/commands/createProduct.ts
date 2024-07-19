@@ -2,7 +2,7 @@ import {
 	SlashCommandBuilder,
 	PermissionFlagsBits
 } from 'discord.js';
-import Product from '../schemas/product';
+import Product from '../schemas/Product';
 import { CommandType } from '../typings/Command';
 
 module.exports = {
